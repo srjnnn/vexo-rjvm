@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Piano Tiles Typing Game</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div class="game-container">
+        <div class="game-header">
+            <h1>Piano Tiles Typing Game</h1>
+            <div class="score-board">
+                <div class="score">Score: <span id="score">0</span></div>
+                <div class="lives">Lives: <span id="lives">3</span></div>
+                <div class="level">Level: <span id="level">1</span></div>
+            </div>
+        </div>
+        
+        <div class="game-area">
+            <div class="game-board" id="gameBoard">
+                <!-- Tiles will be generated here -->
+            </div>
+        </div>
+        
+        <div class="speed-controls">
+            <label for="speedSlider" class="speed-label">Game Speed:</label>
+            <input type="range" id="speedSlider" class="speed-slider" min="0.5" max="3" step="0.1" value="1">
+            <span id="speedValue" class="speed-value">1.0x</span>
+        </div>
+        
+        <div class="game-controls">
+            <button id="startBtn" class="btn">Start Game</button>
+            <button id="pauseBtn" class="btn" disabled>Pause</button>
+            <button id="resetBtn" class="btn">Reset</button>
+        </div>
+        
+    </div>
+    
+    <div class="game-over-modal" id="gameOverModal">
+        <div class="modal-content">
+            <h2>Game Over!</h2>
+            <p>Final Score: <span id="finalScore">0</span></p>
+            <p>Level Reached: <span id="finalLevel">1</span></p>
+            <button id="playAgainBtn" class="btn">Play Again</button>
+        </div>
+    </div>
+    
+    <script src="script.js"></script>
+</body>
+</html>
