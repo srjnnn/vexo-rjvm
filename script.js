@@ -19,11 +19,11 @@ class PianoTilesGame {
         this.lives = 3;
         this.level = 1;
         this.tiles = [];
-        this.baseGameSpeed = 2000; // milliseconds between tile spawns
-        this.gameSpeed = 2000; // current game speed
-        this.baseTileSpeed = 1.5; // base pixels per frame
-        this.tileSpeed = 1.5; // current tile speed
-        this.speedMultiplier = 1.0; // user-controlled speed multiplier
+        this.baseGameSpeed = 2000;
+        this.gameSpeed = 2000;
+        this.baseTileSpeed = 1.5;
+        this.tileSpeed = 1.5; 
+        this.speedMultiplier = 1.0; 
         this.gameLoop = null;
         this.tileSpawnTimer = null;
         this.lastFrameTime = 0;
@@ -90,13 +90,10 @@ class PianoTilesGame {
     }
     
     resetGame() {
-        // Stop all game processes first
         this.stopGame();
         
-        // Clear the game board completely
         this.clearBoard();
         
-        // Reset all game state
         this.gameState = 'stopped';
         this.score = 0;
         this.lives = 3;
@@ -106,16 +103,13 @@ class PianoTilesGame {
         this.tileSpeed = this.baseTileSpeed;
         this.speedMultiplier = parseFloat(this.speedSlider.value);
         
-        // Update display and hide modal
         this.updateDisplay();
         this.hideGameOverModal();
         
-        // Reset button states
         this.startBtn.disabled = false;
         this.pauseBtn.disabled = true;
         this.pauseBtn.textContent = 'Pause';
         
-        // Force a visual refresh
         this.gameBoard.innerHTML = '';
     }
     
@@ -200,19 +194,16 @@ class PianoTilesGame {
     }
     
     moveTiles(deltaTime) {
-        const speedMultiplier = deltaTime / 16.67; // Normalize to 60fps
+        const speedMultiplier = deltaTime / 16.67; 
         const adjustedSpeed = this.tileSpeed * speedMultiplier;
         
-        // Use for loop in reverse to avoid index issues when removing tiles
         for (let i = this.tiles.length - 1; i >= 0; i--) {
             const tile = this.tiles[i];
             if (!tile.hit) {
                 tile.y += adjustedSpeed;
                 
-                // Use transform for smoother movement
                 tile.element.style.transform = `translate3d(0, ${tile.y}px, 0)`;
                 
-                // Check if tile reached bottom - tile must be completely past the bottom edge
                 const gameBoardHeight = this.gameBoard.offsetHeight;
                 if (tile.y > gameBoardHeight) {
                     this.missTile(tile, i);
@@ -225,7 +216,6 @@ class PianoTilesGame {
         if (!this.isGameActive()) return;
         
         const pressedKey = event.key.toUpperCase();
-        // Find the first unhit tile with matching letter
         const tileIndex = this.tiles.findIndex(tile => 
             !tile.hit && tile.letter === pressedKey
         );
@@ -237,33 +227,29 @@ class PianoTilesGame {
     
     hitTile(tileIndex) {
         const tile = this.tiles[tileIndex];
-        if (!tile || tile.hit) return; // Prevent double hits
+        if (!tile || tile.hit) return; 
         
         tile.hit = true;
         tile.element.classList.add('hit');
         
-        // Update score
         this.score += 10;
         this.updateDisplay();
         
-        // Remove tile after animation
         setTimeout(() => {
             this.removeTileById(tile.id);
         }, 300);
         
-        // Check for level up
         this.checkLevelUp();
     }
     
     missTile(tile, index) {
-        if (tile.hit) return; // Prevent double processing
+        if (tile.hit) return;
         
-        tile.hit = true; // Mark as processed
+        tile.hit = true;
         tile.element.classList.add('missed');
         this.lives--;
         this.updateDisplay();
         
-        // Remove tile
         setTimeout(() => {
             this.removeTileById(tile.id);
         }, 300);
@@ -304,15 +290,12 @@ class PianoTilesGame {
     }
     
     increaseDifficulty() {
-        // Increase base speed and decrease spawn time
         this.baseTileSpeed = Math.min(this.baseTileSpeed + 0.3, 6);
         this.baseGameSpeed = Math.max(this.baseGameSpeed - 100, 500);
         
-        // Apply current speed multiplier
         this.tileSpeed = this.baseTileSpeed * this.speedMultiplier;
         this.gameSpeed = this.baseGameSpeed / this.speedMultiplier;
         
-        // Restart tile spawning with new speed
         if (this.tileSpawnTimer) {
             clearInterval(this.tileSpawnTimer);
             this.startTileSpawning();
@@ -342,17 +325,14 @@ class PianoTilesGame {
     }
     
     clearBoard() {
-        // Remove all tile elements from DOM
         this.tiles.forEach(tile => {
             if (tile.element && tile.element.parentNode) {
                 tile.element.parentNode.removeChild(tile.element);
             }
         });
         
-        // Clear the tiles array
         this.tiles = [];
         
-        // Force clear any remaining elements in the game board
         const gameBoardElements = this.gameBoard.querySelectorAll('.tile');
         gameBoardElements.forEach(element => {
             if (element.parentNode) {
@@ -360,11 +340,9 @@ class PianoTilesGame {
             }
         });
         
-        // Ensure game board is completely empty
         this.gameBoard.innerHTML = '';
     }
     
-    // Add safety check for game state
     isGameActive() {
         return this.gameState === 'playing' && this.lives > 0;
     }
@@ -373,7 +351,6 @@ class PianoTilesGame {
         this.speedMultiplier = parseFloat(speedValue);
         this.speedValue.textContent = this.speedMultiplier.toFixed(1) + 'x';
         
-        // Update current speeds based on multiplier
         this.gameSpeed = this.baseGameSpeed / this.speedMultiplier;
         this.tileSpeed = this.baseTileSpeed * this.speedMultiplier;
         
